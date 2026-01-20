@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Customer Analytics Dashboard</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body id="body" class="bg-slate-100">
+
+<!-- TOP NAVBAR -->
+<div class="bg-white shadow-sm border-b">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    
+    <h1 class="text-xl font-bold text-indigo-700">
+      AI Customer Segmentation Dashboard
+    </h1>
+
+    <div class="flex gap-4 items-center">
+      <span class="text-gray-500 text-sm">Machine Learning Analytics</span>
+      <button onclick="toggleDark()" 
+      class="bg-indigo-600 text-white px-3 py-1 rounded-md text-sm hover:bg-indigo-700">
+        Dark Mode
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="max-w-7xl mx-auto px-6 py-8">
+
+<!-- PAGE TITLE -->
+<div class="mb-8">
+  <h2 class="text-3xl font-bold text-gray-800">Customer Overview</h2>
+  <p class="text-gray-500">AI-powered customer behavior segmentation</p>
+</div>
+
+<!-- KPI CARDS -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+{% for key, value in counts.items() %}
+
+<div class="bg-white rounded-xl p-6 shadow hover:shadow-lg transition">
+
+<p class="text-gray-500">{{ key }}</p>
+
+<h2 class="text-4xl font-bold text-indigo-600 counter"
+data-target="{{ value }}">0</h2>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<!-- CHART + INSIGHT GRID -->
+<div class="grid md:grid-cols-2 gap-8 mb-10">
+
+<!-- CHART -->
+<div class="bg-white p-6 rounded-xl shadow">
+
+<h3 class="font-semibold text-gray-800 mb-3">
+Customer Segment Distribution
+</h3>
+
+<canvas id="segmentChart"></canvas>
+
+</div>
+
+<!-- INSIGHTS -->
+<div class="bg-white p-6 rounded-xl shadow">
+
+<h3 class="font-semibold text-gray-800 mb-3">
+Business Insights
+</h3>
+
+<ul class="space-y-3 text-gray-600 text-sm">
+
+<li>✔ High spenders respond well to premium offers</li>
+<li>✔ Loyal customers should get reward programs</li>
+<li>✔ Budget shoppers convert better with discounts</li>
+<li>✔ Occasional buyers need re-engagement campaigns</li>
+
+</ul>
+
+</div>
+
+</div>
+
+<!-- CUSTOMER TABLE -->
+<div class="bg-white p-6 rounded-xl shadow mt-10">
+
+<h3 class="text-lg font-bold text-indigo-700 mb-2">
+Customer Analytics Table
+</h3>
+
+<p class="text-sm text-gray-500 mb-4">
+AI-segmented customer data with behavioral classification and marketing insights.
+</p>
+
+<div class="overflow-x-auto text-sm border rounded-lg">
+{{ tables | safe }}
+</div>
+
+</div>
+
+
+<!-- CHART SCRIPT -->
+<script>
+
+const labels = JSON.parse('{{ counts.keys() | list | tojson | safe }}');
+const values = JSON.parse('{{ counts.values() | list | tojson | safe }}');
+
+new Chart(document.getElementById("segmentChart"), {
+  type: "bar",
+  data: {
+    labels: labels,
+    datasets: [{
+      label: "Customers",
+      data: values,
+      backgroundColor: ["#6366f1","#8b5cf6","#ec4899"]
+    }]
+  },
+  options: {
+    responsive: true
+  }
+});
+
+</script>
+
+<!-- COUNTER ANIMATION -->
+<script>
+
+const counters = document.querySelectorAll(".counter");
+
+counters.forEach(counter => {
+  let target = +counter.getAttribute("data-target");
+  let count = 0;
+
+  let interval = setInterval(() => {
+    count += Math.ceil(target / 40);
+    if (count >= target) {
+      counter.innerText = target;
+      clearInterval(interval);
+    } else {
+      counter.innerText = count;
+    }
+  }, 40);
+});
+
+</script>
+
+<!-- DARK MODE -->
+<script>
+function toggleDark(){
+  document.getElementById("body").classList.toggle("bg-gray-900");
+}
+</script>
+
+</body>
+</html>

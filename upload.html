@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Customer Segmentation</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+</head>
+
+<body class="bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 min-h-screen">
+
+<div class="max-w-7xl mx-auto px-6 py-12">
+
+<!-- HERO SECTION -->
+<div class="grid md:grid-cols-2 gap-8 items-center">
+
+<div>
+<h1 class="text-5xl font-extrabold text-indigo-800 leading-tight">
+AI Powered <br> Customer Segmentation Platform
+</h1>
+
+<p class="mt-4 text-gray-700 text-lg">
+Upload your e-commerce dataset and instantly discover hidden customer behavior patterns using Machine Learning.
+</p>
+
+<div class="mt-6 flex gap-4">
+<span class="bg-indigo-600 text-white px-4 py-2 rounded-full shadow">
+KMeans Clustering
+</span>
+<span class="bg-purple-600 text-white px-4 py-2 rounded-full shadow">
+Business Intelligence
+</span>
+</div>
+</div>
+
+<div class="flex justify-center">
+<lottie-player 
+src="https://assets2.lottiefiles.com/packages/lf20_jcikwtux.json"
+background="transparent" 
+speed="1" 
+style="width:350px;height:350px"
+loop autoplay>
+</lottie-player>
+</div>
+
+</div>
+
+<!-- UPLOAD CARD -->
+<div class="mt-12 bg-white/70 backdrop-blur-lg p-8 rounded-2xl shadow-xl max-w-xl mx-auto">
+
+<h2 class="text-2xl font-bold text-center text-indigo-700 mb-4">
+Upload Customer Dataset
+</h2>
+
+<form action="/dashboard" method="POST" enctype="multipart/form-data">
+
+<input type="file" name="file" required
+class="w-full p-3 border rounded mb-4">
+
+<button class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 
+hover:scale-105 transition text-white font-semibold py-3 rounded-xl shadow-lg">
+
+Start AI Analysis 🚀
+
+</button>
+
+</form>
+
+</div>
+
+<!-- FEATURES -->
+<div class="grid md:grid-cols-3 gap-6 mt-14">
+
+<div class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
+<h3 class="font-bold text-indigo-700">Smart Segmentation</h3>
+<p class="text-gray-600 text-sm mt-2">
+Automatically groups customers based on behavior patterns.
+</p>
+</div>
+
+<div class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
+<h3 class="font-bold text-purple-700">Marketing Insights</h3>
+<p class="text-gray-600 text-sm mt-2">
+Helps businesses create targeted campaigns.
+</p>
+</div>
+
+<div class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
+<h3 class="font-bold text-pink-700">Interactive Dashboard</h3>
+<p class="text-gray-600 text-sm mt-2">
+Visual charts and real-time analytics display.
+</p>
+</div>
+
+</div>
+
+<!-- FOOTER -->
+<p class="text-center mt-10 text-gray-500 text-sm">
+Built using Machine Learning + Flask + Tailwind CSS 💙
+</p>
+
+</div>
+
+</body>
+</html>
