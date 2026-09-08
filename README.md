@@ -1,113 +1,53 @@
-# AI-customer-segmentation
-AI-powered web application for e-commerce customer segmentation using KMeans clustering with interactive analytics dashboard and business insights.
+# AI Customer Segmentation
 
-## 📊 **Project Overview**
+An e-commerce customer segmentation project: a Jupyter notebook does the actual machine learning (feature engineering, KMeans clustering, PCA visualization), and a Flask web dashboard displays the segmented results with interactive charts and a data table.
 
-The AI-Based Customer Segmentation System is a Machine Learning powered web application designed to help e-commerce businesses understand customer behavior and create data-driven marketing strategies.
+---
 
-This system uses KMeans Clustering to automatically segment customers into meaningful groups based on their purchasing patterns and engagement metrics. The application provides an interactive dashboard that visualizes segmentation results and business insights in real time.
+## How it works
 
-The project integrates Data Science, Machine Learning, and Web Development into a single production-style application.
+**1. Feature engineering** (`notebooks/01_load_data.ipynb`) — raw customer data is cleaned and enriched: `Purchase_History` (a JSON-like list per customer) is parsed into a purchase count, and a numeric rating is extracted from free-text product reviews via regex. Final features: Age, Annual Income, Time on Site, Total Purchases, Avg Rating.
 
-## 🎯**Objectives**
+**2. Clustering** — features are standardized (`StandardScaler`), then the optimal cluster count is chosen using the **elbow method** (inertia across k=1–10) and validated with **silhouette scores** (k=2–6). The final model is **KMeans with k=3**.
 
-Automatically group customers using unsupervised learning
+**3. Segment labeling & PCA** — each cluster is mapped to a business-friendly label (*Premium Browsers*, *Standard Customers*, *Loyal Fast Buyer (VIP)*) with a matching marketing-strategy recommendation, and the clusters are visualized in 2D via **PCA**. The labeled result is exported to `outputs/segmented_customers.csv`.
 
-Identify valuable customer segments
+**4. Dashboard** (`app.py`, Flask) — accepts an uploaded CSV and renders it: KPI cards (segment counts), a Chart.js bar chart of segment distribution, and a browsable data table. The Flask app itself does not run any clustering — it expects a CSV that already has the `Customer_Type` column, i.e. the notebook's output file re-uploaded. The "Business Insights" panel is a fixed set of marketing bullet points, not generated per-dataset.
 
-Provide actionable marketing insights
+## Tech stack
 
-Visualize data using interactive charts
+**ML:** Python, pandas, scikit-learn (StandardScaler, KMeans, PCA, silhouette_score), matplotlib
 
-Build a web-based analytics platform
+**Web:** Flask, Tailwind CSS, Chart.js
 
-## ⚙ **How It Works**
+## Architecture
 
-User uploads customer dataset
+```
+notebooks/
+└── 01_load_data.ipynb      # all the actual ML: feature engineering,
+                             # scaling, KMeans, silhouette validation,
+                             # PCA, cluster labeling
+outputs/
+└── segmented_customers.csv # notebook's output — the file the dashboard expects
+app.py                      # Flask app: upload → value_counts → render dashboard
+upload.html / dashboard.html
+```
 
-Data preprocessing and feature engineering is performed
+## Running it
 
-KMeans clustering model segments customers
+**Reproduce the clustering:**
+```bash
+jupyter notebook notebooks/01_load_data.ipynb
+```
+Run all cells — this regenerates `outputs/segmented_customers.csv`.
 
-Business labels are assigned to each cluster
+**View the dashboard:**
+```bash
+pip install flask pandas
+python app.py
+```
+Open `http://127.0.0.1:5000`, then upload `outputs/segmented_customers.csv` (or any CSV with the same `Customer_Type` column already populated).
 
-Results are displayed on an interactive dashboard
+## Notes on scope
 
-Segmented dataset can be exported for further analysis
-
-## 🌟 **Key Features**
-
-Machine Learning based customer segmentation
-
-Automated cluster labeling
-
-Interactive analytics dashboard
-
-Business insight generation
-
-Real-time data visualization
-
-Responsive UI design
-
-Flask-based backend system
-
-## 🧠 **Machine Learning Techniques Used**
-
-KMeans Clustering
-
-Feature Scaling (Standardization)
-
-PCA Visualization
-
-Silhouette Score Optimization
-
-## 📌 **Use Cases**
-
-E-commerce marketing optimization
-
-Customer behavior analysis
-
-Business decision support
-
-Data science portfolio project
-
-Academic final year project
-
-## 🏗 **System Architecture**
-
-Frontend
-→ Tailwind CSS + HTML
-
-Backend
-→ Flask (Python)
-
-ML Layer
-→ Scikit-learn + Pandas
-
-Visualization
-→ Chart.js
-
-
-## ▶️ Run Project Locally
-1️⃣ Install Dependencies:
-pip install -r requirements.txt
-
-2️⃣ Run Flask App:
-python app/app.py
-
-3️⃣ Open Browser:
-http://127.0.0.1:5000
-
-## 🚀 **Future Enhancements**
-
-Login authentication system
-
-PDF report generation
-
-Cloud deployment (Render/Heroku)
-
-Advanced filtering & search
-
-Real-time dataset processing
-
-⭐ If you like this project, give it a star on GitHub!
+This is deliberately split into an offline analysis step and a lightweight results viewer, rather than a single live pipeline. The clustering logic (feature engineering, scaling, elbow/silhouette validation, KMeans, PCA) is genuine and the part worth walking through in an interview. The web app's job is presentation, not computation — uploading a raw, unsegmented dataset won't work, since there's no clustering step wired into Flask. A natural next step would be to move the notebook's pipeline into `app.py` so the dashboard can cluster a fresh upload on the spot.
